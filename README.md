@@ -59,7 +59,7 @@ Le projet repose sur une architecture en micro-services conteneurisée :
    ```
 2. Lancer l'infrastructure :
    ```bash
-   docker-compose up -d
+   sudo docker compose up -d --build
    ```
 3. Télécharger le modèle d'IA (uniquement la première fois) :
    ```bash
