@@ -1,5 +1,4 @@
 services:
-  # Le moteur d'IA
   ollama:
     image: ollama/ollama
     restart: always
@@ -13,19 +12,31 @@ services:
               count: 1
               capabilities: [gpu]
 
-  # Ton interface de raisonnement
+  # Le Backend (FastAPI)
   devops-api:
     build: .
     restart: always
     ports:
       - "8000:8000"
-      - "8501:8501"
     volumes:
       - ./app/memory:/app/memory
     environment:
       - OLLAMA_HOST=http://ollama:11434
     depends_on:
       - ollama
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+
+  # Le Frontend (Streamlit)
+  devops-ui:
+    build: .
+    restart: always
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://devops-api:8000
+    depends_on:
+      - devops-api
+    command: streamlit run ui.py --server.port 8501 --server.address 0.0.0.0
 
 volumes:
   ollama_data:
