@@ -24,11 +24,38 @@ Le projet repose sur une architecture en micro-services conteneurisée :
 
 ---
 
+## 🛠️ Fonctionnalités Clés
+
+* **Inférence 100% Locale** : Confidentialité totale, aucune donnée n'est envoyée dans le cloud.
+* **Accélération Hardware** : Optimisé pour les GPU NVIDIA (testé sur RTX 3050) via `nvidia-container-runtime`.
+* **Réponses en Français** : Système configuré pour traduire les concepts complexes en français technique clair.
+* **Haute Disponibilité** : Configuration `restart: always` pour un service opérationnel dès le démarrage du PC.
+* **Persistance** : Volume Docker dédié pour conserver les modèles et éviter les retéléchargements.
+---
+
+## 🚀 Exemple de Requête & Résultat
+**Utilisateur :** *"Pourquoi mon `docker-compose up` échoue avec 'port already allocated' ?"*
+
+**Réponse de l'Expert (IA) :**
+1. **Indices** : Port 8080 occupé, service Nginx en conflit.
+2. **Lien** : Une instance de test tourne déjà en arrière-plan sur le même port.
+3. **Solution** : `docker ps` pour identifier l'ID, puis `docker stop <ID>` ou changer le mapping de port dans le fichier YAML.
+
+---
 ## 🚀 Installation et Démarrage
 
 ### Prérequis
 * Docker et Docker-Compose installés.
 * NVIDIA Container Toolkit (pour l'accélération GPU).
+
+### 🔧 Installation Rapide
+```bash
+# Lancer l'infrastructure
+docker-compose up -d
+
+# Accéder à l'interface
+# http://localhost:8501
+```
 
 ### Lancement
 1. Clonez le dépôt :
