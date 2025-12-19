@@ -4,11 +4,8 @@ Ce projet est un assistant intelligent spécialisé dans le diagnostic et la ré
 
 ## 📸 Aperçu de l'application
 
-### Interface Utilisateur (Port 8501)
-![Interface Streamlit](./images/screenshot-ui.png)
-
-### Documentation API (Port 8000)
-![Documentation FastAPI](./images/screenshot-docs.png)
+### 🖥️ Aperçu du fonctionnement
+![Démo de l'expert DevOps](./images/demo.png)
 
 ## 🏗️ Architecture du Projet
 
