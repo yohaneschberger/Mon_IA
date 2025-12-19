@@ -26,4 +26,5 @@ async def solve_problem(user_input: str):
             "http://ollama:11434/api/generate",
             json={"model": "llama3:latest", "prompt": prompt, "stream": False}
         )
+        
         return response.json()
