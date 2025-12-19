@@ -48,13 +48,6 @@ Le projet repose sur une architecture en micro-services conteneurisée :
 * Docker et Docker-Compose installés.
 * NVIDIA Container Toolkit (pour l'accélération GPU).
 
-
-# Lancer l'infrastructure
-docker-compose up -d
-
-# Accéder à l'interface
-# http://localhost:8501
-
 ### Lancement
 1. Clonez le dépôt :
    ```bash
