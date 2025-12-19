@@ -48,17 +48,25 @@ Le projet repose sur une architecture en micro-services conteneurisée :
 * Docker et Docker-Compose installés.
 * NVIDIA Container Toolkit (pour l'accélération GPU).
 
-### 🔧 Installation Rapide
-```bash
+
 # Lancer l'infrastructure
 docker-compose up -d
 
 # Accéder à l'interface
 # http://localhost:8501
-```
 
 ### Lancement
 1. Clonez le dépôt :
    ```bash
    git clone [https://github.com/votre-utilisateur/votre-projet.git](https://github.com/votre-utilisateur/votre-projet.git)
    cd votre-projet
+   ```
+2. Lancer l'infrastructure :
+   ```bash
+   docker-compose up -d
+   ```
+3. Télécharger le modèle d'IA (uniquement la première fois) :
+   ```bash
+   docker exec -it mon_ia_ollama_1 ollama pull llama3
+   ```
+4. Accéder à l'interface : Ouvrez votre navigateur et allez à l'adresse suivante : 👉   http://localhost:8501
