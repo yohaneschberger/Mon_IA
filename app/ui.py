@@ -1,4 +1,4 @@
-import streamlit as st
+import streamlit as st # type: ignore
 import requests  # Plus simple pour le streaming avec iter_content
 
 st.set_page_config(page_title="Mon Expert DevOps", page_icon="🤖")
