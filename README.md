@@ -2,14 +2,20 @@
 
 Ce projet est un assistant intelligent spécialisé dans le diagnostic et la résolution de problèmes DevOps. Il utilise un modèle de langage (LLM) performant tournant localement pour garantir la confidentialité des données et une disponibilité totale sans frais d'API.
 
+## 📸 Aperçu de l'application
+
+### Interface Utilisateur (Port 8501)
+![Interface Streamlit](./images/screenshot-ui.png)
+
+### Documentation API (Port 8000)
+![Documentation FastAPI](./images/screenshot-docs.png)
+
 ## 🏗️ Architecture du Projet
 
 Le projet repose sur une architecture en micro-services conteneurisée :
 * **Interface (Frontend)** : Développée avec **Streamlit** pour une interaction utilisateur fluide et intuitive.
 * **Cerveau (Backend)** : Une API **FastAPI** qui orchestre la logique et formate les requêtes.
 * **Moteur IA** : **Ollama** hébergeant le modèle **Llama 3**, avec accélération matérielle via GPU NVIDIA.
-
-
 
 ---
 
