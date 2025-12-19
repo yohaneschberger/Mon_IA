@@ -1,0 +1,18 @@
+# Docker & OS
+.DS_Store
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Données sensibles et mémoire de l'IA
+app/memory/chat_history.json
+app/memory/
+.env
+
+# VS Code
+.vscode/
