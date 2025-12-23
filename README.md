@@ -1,4 +1,4 @@
-# 🤖 Expert DevOps IA - Stack Locale & Persistante
+# 🤖 Projet Expert DevOps IA - Stack Locale & Persistante
 
 Ce projet est un assistant intelligent spécialisé dans l'ingénierie DevOps. Contrairement aux solutions Cloud, il offre une **confidentialité totale** et une **mémoire à long terme** grâce à une architecture locale optimisée pour les GPU NVIDIA.
 
