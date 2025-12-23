@@ -1,16 +1,24 @@
 import streamlit as st # type: ignore
+import os
 import requests  # Plus simple pour le streaming avec iter_content
 
-st.set_page_config(page_title="Mon Expert DevOps", page_icon="🤖")
-st.title("🤖 Mon Expert DevOps")
+API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
 
+st.set_page_config(page_title="Mon Expert DevOps", page_icon="🤖")
+
+######### GESTION DE LA SESSION ET DES SUJETS #########
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+######### INTERFACE PRINCIPALE #########
+st.title("🤖 Mon Expert DevOps")
+
+# Affichage des messages
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
+# Input utilisateur
 if prompt := st.chat_input("Posez votre question DevOps..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
@@ -25,8 +33,10 @@ if prompt := st.chat_input("Posez votre question DevOps..."):
             # Appel API en mode stream
             # Note: on utilise requests ici car c'est plus direct pour st.write_stream
             with requests.post(
-                "http://devops-api:8000/solve",
-                params={"user_input": prompt},
+                f"{API_URL}/solve",
+                params={
+                    "user_input": prompt,
+                    "user_id": st.session_state.current_subject},
                 stream=True,
                 timeout=60
             ) as r:

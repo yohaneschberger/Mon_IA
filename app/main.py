@@ -2,32 +2,48 @@ from fastapi import FastAPI # type: ignore
 from fastapi.responses import StreamingResponse # type: ignore
 import httpx # type: ignore
 import json
+import redis # type: ignore
 import os
 
+
+# 1. Initialisation de l'application FastAPI
 app = FastAPI()
 
-MEMORY_DIR = "/app/memory"
-MEMORY_FILE = os.path.join(MEMORY_DIR, "chat_history.json")
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost") # Adresse de Redis
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", None) # Mot de passe Redis si nécessaire
 
-if not os.path.exists(MEMORY_DIR):
-    os.makedirs(MEMORY_DIR)
+r_db = redis.Redis(host=REDIS_HOST, port=6379, password=REDIS_PASSWORD, decode_responses=True) # Connexion à Redis
 
-def load_memory():
-    try:
-        if os.path.exists(MEMORY_FILE):
-            with open(MEMORY_FILE, "r") as f:
-                content = f.read()
-                return json.loads(content) if content else []
-    except Exception as e:
-        print(f"Erreur mémoire : {e}")
-    return []
+# 2. Événement de démarrage pour préparer Ollama
+@app.on_event("startup")
+async def startup_event():
+    print("Initialisation du système...")
+    # On vérifie si Ollama est prêt et on pull le modèle
+    async with httpx.AsyncClient(timeout=None) as client:
+        try:
+            print("Vérification du modèle llama3...")
+            await client.post(
+                "http://ollama:11434/api/pull", 
+                json={"name": "llama3"},
+                timeout=None
+            )
+            print("Modèle prêt et chargé !")
+        except Exception as e:
+            print(f"Attention: Impossible de joindre Ollama : {e}")
 
-def save_memory(history):
-    with open(MEMORY_FILE, "w") as f:
-        json.dump(history, f, indent=4)
+# 3. Gestion de la mémoire avec Redis
+def load_memory(user_id="default_user"):
+    # On récupere l'historique depuis Redis sous forme de string JSON
+    data = r_db.get(user_id)
+    return json.loads(data) if data else []
 
+def save_memory(history, user_id="default_user"):
+    # On stocke l'historique en JSON dans Redis
+    r_db.set(user_id, json.dumps(history))
+
+# 4. Endpoint principal pour résoudre les problèmes DevOps
 @app.post("/solve")
-async def solve_problem(user_input: str):
+async def solve_problem(user_input: str, user_id: str = "default_user"):
     history = load_memory()
     
     # Construction du prompt avec consignes de style
@@ -48,16 +64,17 @@ async def solve_problem(user_input: str):
     3. La solution concrète ou la commande à tester.
     """
 
+    # Streaming de la réponse depuis Ollama
     async def event_generator():
-        full_response = ""
-        timeout = httpx.Timeout(60.0, connect=10.0)
-        async with httpx.AsyncClient(timeout=timeout) as client:
+        full_response = ""  # Pour stocker la réponse complète
+        timeout = httpx.Timeout(60.0, connect=10.0) # Timeout pour la requête
+        async with httpx.AsyncClient(timeout=timeout) as client:    # Connexion à Ollama
             async with client.stream(
                 "POST",
                 "http://ollama:11434/api/generate",
                 json={"model": "llama3:latest", "prompt": prompt, "stream": True}
             ) as response:
-                async for line in response.aiter_lines():
+                async for line in response.aiter_lines():   # Lecture ligne par ligne
                     if line:
                         data = json.loads(line)
                         chunk = data.get("response", "")

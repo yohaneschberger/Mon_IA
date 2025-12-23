@@ -1,4 +1,5 @@
 services:
+  # Le modèle Ollama avec GPU
   ollama:
     image: ollama/ollama
     restart: always
@@ -12,6 +13,29 @@ services:
               count: 1
               capabilities: [gpu]
 
+  # La base de données de session
+  redis:
+    image: redis:alpine
+    command: redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+  # L'interface RedisInsight pour gérer Redis
+  redis-insight:
+    image: redis/redisinsight:latest
+    restart: always
+    ports:
+      - "5540:5540"
+    depends_on:
+      - redis
+
   # Le Backend (FastAPI)
   devops-api:
     build: .
@@ -19,12 +43,17 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./app/memory:/app/memory
+      - ./app:/app
     environment:
       - OLLAMA_HOST=http://ollama:11434
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     depends_on:
-      - ollama
-    command: uvicorn main:app --host 0.0.0.0 --port 8000
+      ollama:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
   # Le Frontend (Streamlit)
   devops-ui:
@@ -32,11 +61,25 @@ services:
     restart: always
     ports:
       - "8501:8501"
+    volumes:
+      - ./app:/app
     environment:
       - API_URL=http://devops-api:8000
     depends_on:
       - devops-api
     command: streamlit run ui.py --server.port 8501 --server.address 0.0.0.0
 
+  # Le surveillant (Dashboard de monitoring)
+  monitoring:
+    image: nicolargo/glances:latest
+    restart: always
+    ports:
+      - "61208:61208"
+    environment:
+      - GLANCES_OPT=-w
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
 volumes:
   ollama_data:
+  redis_data:
