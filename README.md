@@ -71,6 +71,7 @@ sudo docker compose up -d
 
 ## 📁 Structure du Projet
 
+```
 .
 ├── app/
 │   ├── main.py          # API Backend (FastAPI)
@@ -79,6 +80,7 @@ sudo docker compose up -d
 ├── docker-compose.yml   # Orchestration des micro-services
 ├── Dockerfile           # Configuration de l'image Python
 └── README.md            # Documentation
+```
 
 ---
 
