@@ -1,4 +1,4 @@
-# 🤖 Expert DevOps IA - Stack Locale & Persistante
+# 🤖 Projet Expert DevOps IA - Stack Locale & Persistante
 
 Ce projet est un assistant intelligent spécialisé dans l'ingénierie DevOps. Contrairement aux solutions Cloud, il offre une **confidentialité totale** et une **mémoire à long terme** grâce à une architecture locale optimisée pour les GPU NVIDIA.
 
@@ -46,6 +46,19 @@ Le projet repose sur une orchestration de micro-services conteneurisés permetta
 
 ---
 
+## ⚙️ Configuration (.env)
+
+Comme le fichier `.env` contient des informations sensibles (mots de passe), il n'est pas suivi par Git. Vous devez créer un fichier `.env` à la racine du projet avant le lancement :
+
+```env
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_PASSWORD=votre_mot_de_passe_robuste
+OLLAMA_URL=http://ollama:11434/api/generate
+```
+
+---
+
 ## 🚀 Installation et Démarrage
 
 ### 1. Prérequis
@@ -71,14 +84,16 @@ sudo docker compose up -d
 
 ## 📁 Structure du Projet
 
+```
 .
 ├── app/
 │   ├── main.py          # API Backend (FastAPI)
 │   ├── ui.py            # Interface Utilisateur (Streamlit)
-│   └── memory/          # Backup local de la mémoire
+├── .env                 # Variables d'environnement (non suivi par Git)
 ├── docker-compose.yml   # Orchestration des micro-services
 ├── Dockerfile           # Configuration de l'image Python
 └── README.md            # Documentation
+```
 
 ---
 
