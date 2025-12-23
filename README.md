@@ -60,3 +60,33 @@ cd votre-projet
 
 # Lancer les services (le premier lancement build les images)
 sudo docker compose up -d
+```
+
+### 3. Accès aux interfaces
+* 💬 Chat IA : http://localhost:8501
+* 📊 Monitoring (Glances) : http://localhost:61208
+* 🔍 Exploration Redis : http://localhost:5540
+
+---
+
+## 📁 Structure du Projet
+
+.
+├── app/
+│   ├── main.py          # API Backend (FastAPI)
+│   ├── ui.py            # Interface Utilisateur (Streamlit)
+│   └── memory/          # Backup local de la mémoire
+├── docker-compose.yml   # Orchestration des micro-services
+├── Dockerfile           # Configuration de l'image Python
+└── README.md            # Documentation
+
+---
+
+## 💡 Astuces Développement
+
+**Hot Reload** : Le projet utilise des Bind Mounts. Si vous modifiez app/main.py ou app/ui.py, le serveur se recharge automatiquement. Inutile de relancer docker compose up --build.
+
+**Nettoyage de la mémoire** : Pour réinitialiser les discussions, vous pouvez vider les clés dans RedisInsight ou utiliser la commande :
+```bash
+docker exec -it <nom_du_conteneur_redis> redis-cli FLUSHALL
+```
