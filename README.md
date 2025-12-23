@@ -76,7 +76,6 @@ sudo docker compose up -d
 ├── app/
 │   ├── main.py          # API Backend (FastAPI)
 │   ├── ui.py            # Interface Utilisateur (Streamlit)
-│   └── memory/          # Backup local de la mémoire
 ├── docker-compose.yml   # Orchestration des micro-services
 ├── Dockerfile           # Configuration de l'image Python
 └── README.md            # Documentation
