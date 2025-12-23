@@ -34,9 +34,7 @@ if prompt := st.chat_input("Posez votre question DevOps..."):
             # Note: on utilise requests ici car c'est plus direct pour st.write_stream
             with requests.post(
                 f"{API_URL}/solve",
-                params={
-                    "user_input": prompt,
-                    "user_id": st.session_state.current_subject},
+                params={"user_input": prompt},
                 stream=True,
                 timeout=60
             ) as r:
