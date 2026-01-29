@@ -2,7 +2,7 @@ services:
   # Le modèle Ollama avec GPU
   ollama:
     image: ollama/ollama
-    restart: always
+    restart: unless-stopped
     volumes:
       - ollama_data:/root/.ollama
     deploy:
@@ -30,7 +30,7 @@ services:
   # L'interface RedisInsight pour gérer Redis
   redis-insight:
     image: redis/redisinsight:latest
-    restart: always
+    restart: unless-stopped
     ports:
       - "5540:5540"
     depends_on:
@@ -39,7 +39,7 @@ services:
   # Le Backend (FastAPI)
   devops-api:
     build: .
-    restart: always
+    restart: unless-stopped
     ports:
       - "8000:8000"
     volumes:
@@ -58,7 +58,7 @@ services:
   # Le Frontend (Streamlit)
   devops-ui:
     build: .
-    restart: always
+    restart: unless-stopped
     ports:
       - "8501:8501"
     volumes:
@@ -72,7 +72,7 @@ services:
   # Le surveillant (Dashboard de monitoring)
   monitoring:
     image: nicolargo/glances:latest
-    restart: always
+    restart: unless-stopped
     ports:
       - "61208:61208"
     environment:
